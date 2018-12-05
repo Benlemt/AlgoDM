@@ -501,7 +501,7 @@ def main():
 
     reecrireNeg(a)
 
-    print("testcommit")
+    print("CECI EST UN TEST")
 
 
     # testSymbole()
