@@ -216,39 +216,25 @@ def reecrireImp(a):
 def reecrireNeg(a): 
     if a == None:
         return None
-    postfixeRec(a)
-    print("\n")
+
     if face(r(a)) == "-":
         if face(r(d(a))) == "-":
             a = d(d(a))
+            reecrireNeg(a)
         elif face(r(d(a))) == "+":
             arbreG = crAbin(symboleCreer("-"), None, g(d(a)))
             arbreD = crAbin(symboleCreer("-"), None, d(d(a)))
-            a.gauche = arbreG
-            a.droit = arbreD
+            a.gauche = reecrireNeg(arbreG)
+            a.droit = reecrireNeg(arbreD)
             a.valeur = symboleCreer("*") 
-
         elif face(r(d(a))) == "*":
             arbreG = crAbin(symboleCreer("-"), None, g(d(a)))
             arbreD = crAbin(symboleCreer("-"), None, d(d(a)))
-            a.gauche = arbreG
-            a.droit = arbreD
-            a.valeur = symboleCreer("+") 
-    
-
-
-    print("fin : \n")
-    postfixeRec(a)
-
-    reecrireNeg(g(a))
-    reecrireNeg(d(a))
-     
+            a.gauche = reecrireNeg(arbreG)
+            a.droit = reecrireNeg(arbreD)
+            a.valeur = symboleCreer("+")
     return a
 
-
-
-
-            
 
 def reecrireOuEt( a):
     pass
@@ -495,13 +481,14 @@ def main():
     # postfixeRec(raaa)
 
 
-    a = postfixeToAbin("b-ac+-+-")
+    a = postfixeToAbin("p-q+q-p+*-")
     postfixeRec(a)
     print("\n")
 
-    reecrireNeg(a)
 
-    print("CECI EST UN TEST")
+    postfixeRec(reecrireNeg(a))
+
+
 
 
     # testSymbole()
