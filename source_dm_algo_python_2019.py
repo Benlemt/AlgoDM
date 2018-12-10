@@ -265,8 +265,9 @@ def reecrireOuEt(a):
             a.valeur = symboleCreer("*") 
     return a
     
-def fnc(A):
-    pass
+def fnc(a):
+    return reecrireOuEt(reecrireNeg(reecrireNeg(reecrireImp(reecrireEquiv(a)))))
+
 #--------------- forme clausale ------------*/
 
 class NoeudClause:
@@ -507,13 +508,10 @@ def main():
     # postfixeRec(raaa)
 
 
-    a = postfixeToAbin("pq*rs*+")
-    print(infixeRec((a)))
-    print("\n")
-
-
-    print(infixeRec((reecrireOuEt(a))))
-
+    phi = crAbin(symboleCreer(">"),crAbin(symboleCreer("*"),crAbin(symboleCreer("*"),crAbin(symboleCreer("="),feuilleCreer("p"),feuilleCreer("q")),crAbin(symboleCreer(">"),feuilleCreer("q"),feuilleCreer("s"))),feuilleCreer("p")),feuilleCreer("s"))
+    
+    
+    
 
     # testSymbole()
     # testAbin()
