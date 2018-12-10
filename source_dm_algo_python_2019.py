@@ -236,8 +236,34 @@ def reecrireNeg(a):
     return a
 
 
-def reecrireOuEt( a):
-    pass
+def reecrireOuEt(a):
+    if a == None:
+        return None
+
+    if face(r(a)) == "+":
+        if face(r(g(a))) == "*" and face(r(d(a))) != "*":
+            arbreG = crAbin(symboleCreer("+"), g(g(a)), d(a))
+            arbreD = crAbin(symboleCreer("+"), d(g(a)), d(a))
+            a.gauche = reecrireOuEt(arbreG)
+            a.droit = reecrireOuEt(arbreD)
+            a.valeur = symboleCreer("*") 
+        elif face(r(g(a))) != "*" and face(r(d(a))) == "*":
+            arbreG = crAbin(symboleCreer("+"), g(a), g(d(a)))
+            arbreD = crAbin(symboleCreer("+"), g(a), d(d(a)))
+            a.gauche = reecrireOuEt(arbreG)
+            a.droit = reecrireOuEt(arbreD)
+            a.valeur = symboleCreer("*") 
+        elif face(r(g(a))) == "*" and face(r(d(a))) == "*":
+            arbreGG = crAbin(symboleCreer("+"), g(g(a)), g(d(a)))
+            arbreGD = crAbin(symboleCreer("+"), g(g(a)), d(d(a)))
+            arbreDG = crAbin(symboleCreer("+"), d(g(a)), g(d(a)))
+            arbreDD = crAbin(symboleCreer("+"), d(g(a)), d(d(a)))
+            arbreG = crAbin(symboleCreer("*"),arbreGG,arbreGD)
+            arbreD = crAbin(symboleCreer("*"),arbreDG,arbreDD)
+            a.gauche = reecrireOuEt(arbreG)
+            a.droit = reecrireOuEt(arbreD)
+            a.valeur = symboleCreer("*") 
+    return a
     
 def fnc(A):
     pass
@@ -257,7 +283,7 @@ class  NoeudListeDeClauses:
         self.suivt = suiv
 
 def ajListeDeClausesDevant(c ,  lc=None):
-    return NoeudListeDeClauses(c, l)
+    return NoeudListeDeClauses(c, lc)
 	
 def estNeg(A):
     return (r(A).face=='-')
@@ -481,14 +507,12 @@ def main():
     # postfixeRec(raaa)
 
 
-    a = postfixeToAbin("p-q+q-p+*-")
-    postfixeRec(a)
+    a = postfixeToAbin("pq*rs*+")
+    print(infixeRec((a)))
     print("\n")
 
 
-    postfixeRec(reecrireNeg(a))
-
-
+    print(infixeRec((reecrireOuEt(a))))
 
 
     # testSymbole()
