@@ -272,22 +272,22 @@ def fnc(a):
 
 class NoeudClause:
     def __init__(self,val, suiv):
-        self.val=val
-        self.suivt=suiv
+        self.valeur=val
+        self.suivant=suiv
 
 def  ajClauseDevant(a , c=None):
     return NoeudClause(a, c)
 
 class  NoeudListeDeClauses:
     def __init__(self, val,  suiv):
-        self.val=val
-        self.suivt = suiv
+        self.valeur = val
+        self.suivant = suiv
 
 def ajListeDeClausesDevant(c ,  lc=None):
     return NoeudListeDeClauses(c, lc)
 	
-def estNeg(A):
-    return (r(A).face=='-')
+def estNeg(a):
+    return r(a).face=='-'
 def estOu(A):
     return (r(A).face=='+')
 def estEt(A):
@@ -305,8 +305,8 @@ def append(c, d):
         return c
     pointeur=c
     while(pointeur !=None):
-        d=ajClauseDevant(pointeur.val  , d)
-        pointeur = pointeur.suivt
+        d=ajClauseDevant(pointeur.valeur  , d)
+        pointeur = pointeur.suivant
     return d
 
 def appendLc(lc, ld):
@@ -316,29 +316,29 @@ def appendLc(lc, ld):
         return lc
     pointeur=lc
     while(pointeur !=None):
-        ld=ajListeDeClausesDevant(pointeur.val  , ld)
-        pointeur = pointeur.suivt
+        ld=ajListeDeClausesDevant(pointeur.valeur  , ld)
+        pointeur = pointeur.suivant
     return ld
     
 def afficheClause(c):
     print("{", end="")
     p=c
     while(p!=None):
-        A=p.val
+        A=p.valeur
         if (estNeg(A)):
-            print("-%c, "%r(d(A)).face, end="")
+            print(r(d(A)).face, end="")
         else:
-            print("%c, "%r(A).face, end="")
-        p=p.suivt
+            print(r(A).face, end="")
+        p=p.suivant
     print("}",  end="")
 
 def  afficheListeDeClauses(lc):
     print("{", end="")
     p= lc
     while(p!=None):
-        afficheClause(p.val)
+        afficheClause(p.valeur)
         print(", ", end="")
-        p=p.suivt
+        p=p.suivant
     print("}", end="")
 
 # {{}}
@@ -347,14 +347,16 @@ def videToLc():
 	lc = ajListeDeClausesDevant(c ,None)
 	return lc
 
-#--p devient------ {{p}}
+#-- p devient------ {{p}}
 
-def  feuilleToLc(A):
-    pass
+def  feuilleToLc(a):
+    cl = ajClauseDevant(a)
+    lcl = ajListeDeClausesDevant(cl)
+    return lcl
 
 # -{{p}} devient {{-p}}
-def negToLc( lc):
-    pass
+def negToLc(lc):
+    a = appendLc(lc,None)
     
 # {{a, b}} + {{c, d}} = {a,b,c,d}
 def ouToLc(glc, dlc):
@@ -487,7 +489,7 @@ def testComplet():
     lc=fncToLc(rA); afficheListeDeClauses(lc)
     
 def main():
-    # a = crAbin(symboleCreer('='),crAbin(symboleCreer('='),feuilleCreer('a'),feuilleCreer('b')),crAbin(symboleCreer('='),feuilleCreer('c'),feuilleCreer('d')))
+    #a = crAbin(symboleCreer('='),crAbin(symboleCreer('='),feuilleCreer('a'),feuilleCreer('b')),crAbin(symboleCreer('='),feuilleCreer('c'),feuilleCreer('d')))
     # print("1")
     # a = postfixeToAbin("pq=-")
     # postfixeRec(a)
@@ -507,11 +509,20 @@ def main():
     # raaa = reecrireNeg(raa)
     # postfixeRec(raaa)
 
-
+    a = crAbin(symboleCreer('+'),feuilleCreer("a"),crAbin(symboleCreer('*'),feuilleCreer('b'),feuilleCreer('c')))
     phi = crAbin(symboleCreer(">"),crAbin(symboleCreer("*"),crAbin(symboleCreer("*"),crAbin(symboleCreer("="),feuilleCreer("p"),feuilleCreer("q")),crAbin(symboleCreer(">"),feuilleCreer("q"),feuilleCreer("s"))),feuilleCreer("p")),feuilleCreer("s"))
+
+    feuille = feuilleCreer("p")
+
+    feuille2 = feuilleCreer("q")
+
+    test = appendLc(feuilleToLc(feuille),feuilleToLc(feuille2))
+
+    rire = append(feuilleToLc(feuille),None)
+
     
-    
-    
+    afficheClause(rire)
+
 
     # testSymbole()
     # testAbin()
