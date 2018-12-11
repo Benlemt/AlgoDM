@@ -1,7 +1,7 @@
-##  écrire les noms du binôme  ici  et aussi dans le  nom de fichier
-## dm_algo_2018_gallot_leo_lemattre_benjamin
+#  écrire les noms du binôme  ici  et aussi dans le  nom de fichier
+# dm_algo_2018_gallot_leo_lemattre_benjamin
 
-##-------------symboles ---------
+# -------------symboles ---------
 class Symbole(object): 
     def __init__(self, arite, face): 
         self.arite = arite 
@@ -80,28 +80,35 @@ def infixeRec(A):
             print(")", end="")
 
 def infixeIt(a):
-    print("(", end="")
     current = a
-    while (current is not None):
-        if current.gauche is None:
-            print(current.valeur, end="")
-            current = current.droit
+    pile = NoeudPileAbin(None)
+    pile_parenthese = NoeudPileAbin(None)
+    done = 0
+    nbParenthese = 0
+
+    while (not done):
+
+        if current is not None:
+            if current != None and arite(current.valeur) >= 1:
+                pile_parenthese = empiler("(", pile_parenthese)
+                print("(", end="")
+
+            pile = empiler(current, pile)
+            current = current.gauche
 
         else:
-            pre = current.gauche
-            while(pre.droit is not None and pre.droit != current):
-                pre = pre.droit
-            
-            if (pre.droit is None):
-                pre.droit = current
-                current = current.gauche
-                if arite(current.valeur) == 0 or current.gauche != None and arite(current.gauche.valeur) == 0:
-                    print("(", end="")
-            else:
-                pre.droit = None
+            if sommet(pile) != None:
+                current = sommet(pile)
+                pile = depiler(pile)
+                
+                if sommet(pile_parenthese) == "(" and arite(current.valeur) == 0:
+                    print("%", end="")
+                    pile_parenthese = depiler(pile_parenthese)
                 print(current.valeur, end="")
                 current = current.droit
-    print("))", end="")
+            else:
+                done = 1
+  
 
 
 #-------------pile d'arbres binaires ---------------*/
@@ -514,13 +521,24 @@ def testComplet():
     
 def main():
 
-    mot = "p-qs*+"
-    arbre = postfixeToAbin(mot)
+    # mot1 = "pr+ps+*qr+qs+**"
+    # arbre1 = postfixeToAbin(mot1)
+    # infixeRec(arbre1)
+    # print("\n")
+    # infixeIt(arbre1)
 
-    infixeRec(arbre)
+    # print("\n\n")
+            
+    mot2 = "pq=-"
+    arbre2 = postfixeToAbin(mot2)
+    arbre3 = reecrireEquiv(arbre2)
+    postfixeRec(arbre2)
     print("\n")
-    infixeIt(arbre)
+    postfixeRec(arbre3)
+    #infixeIt(arbre2)
 
+
+    
 
     # testSymbole()
     # testAbin()
@@ -528,7 +546,7 @@ def main():
     # testFormule()
     # testSaisiePostfixe()
     # testReecriture()
-    testLc()
+    # testLc()
     #testFncToLc()
     #testComplet()
 
