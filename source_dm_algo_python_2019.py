@@ -1,4 +1,3 @@
- 
 ##  écrire les noms du binôme  ici  et aussi dans le  nom de fichier
 ## dm_algo_2018_gallot_leo_lemattre_benjamin
 
@@ -71,36 +70,38 @@ def postfixeRec( A):
 #Question 2
 
 def infixeRec(A):
-    mot = ""
     if A != None:
         if arite(r(A)) != 0: 
-            mot += "("+ infixeRec(g(A))
-        mot += face(r(A))
+            print("(", end = "")
+            infixeRec(g(A))
+        print(face(r(A)), end="")
         if arite(r(A)) != 0:
-            mot += infixeRec(d(A)) + ")"
-    else:
-        return mot
-    return mot
+            infixeRec(d(A))
+            print(")", end="")
 
-def infixeIt(A):
-    mot = ""
-    pile = NoeudPileAbin(A)
-    current = g(A)
-    while(pile != None or current != None):
-        if r(current) != None:
-            if sommet(pile) == "(":
-                mot += ")"
-                pile = depiler(pile)
-                current = g(A)
-            else :
-                mot += "("
-                pile = empiler("(",pile)
+def infixeIt(a):
+    print("(", end="")
+    current = a
+    while (current is not None):
+        if current.gauche is None:
+            print(current.valeur, end="")
+            current = current.droit
+
         else:
-            current = sommet(pile)
-            mot += face(r(current))
-            pile = depiler(pile)
-            d(A) 
-    return mot
+            pre = current.gauche
+            while(pre.droit is not None and pre.droit != current):
+                pre = pre.droit
+            
+            if (pre.droit is None):
+                pre.droit = current
+                current = current.gauche
+                if arite(current.valeur) == 0 or current.gauche != None and arite(current.gauche.valeur) == 0:
+                    print("(", end="")
+            else:
+                pre.droit = None
+                print(current.valeur, end="")
+                current = current.droit
+    print("))", end="")
 
 
 #-------------pile d'arbres binaires ---------------*/
@@ -144,7 +145,7 @@ def equiv(g,d):
     return crAbin(symboleCreer('='),g,d)
 
 def neg(g):
-    return crAbin(symboleCreer("*"),None,g)
+    return crAbin(symboleCreer("-"),None,g)
 
  
 #------------------------- lecture ecriture postfixe -----------
@@ -288,8 +289,10 @@ def ajListeDeClausesDevant(c ,  lc=None):
 	
 def estNeg(A):
     return (r(A).face=='-')
+
 def estOu(A):
     return (r(A).face=='+')
+
 def estEt(A):
     return (r(A).face=='*')
     
@@ -349,12 +352,17 @@ def videToLc():
 
 #--p devient------ {{p}}
 
-def  feuilleToLc(A):
-    pass
+def  feuilleToLc(a):
+     cl = ajClauseDevant(a)
+     lcl = ajListeDeClausesDevant(cl)
+     return lcl 
 
 # -{{p}} devient {{-p}}
 def negToLc( lc):
-    pass
+    cl = ajClauseDevant(neg(lc.val.val.valeur))
+    nlc = ajListeDeClausesDevant(neg(cl))
+
+    return nlc
     
 # {{a, b}} + {{c, d}} = {a,b,c,d}
 def ouToLc(glc, dlc):
@@ -402,45 +410,63 @@ def testSaisiePostfixe():
 	postfixeRec(A)
 
 def testReecriture():
-	mot="pq=-"
-	A = postfixeToAbin(mot)
-	rA = reecrireEquiv(A)
-	postfixeRec(A)
-	print(" devient ", end="")
-	postfixeRec(rA)
-	print(" après réecriture de = \n", end="")
-	A=rA
-	rA = reecrireImp(rA)
-	postfixeRec(A)
-	print(" devient ")
-	postfixeRec(rA)
-	print(" après réecriture de >  \n")
-	A=rA
-	rA = reecrireNeg(A)
-	postfixeRec(A)
-	print(" devient ")
-	postfixeRec(rA)
-	print(" après réecriture de - \n")
+	# mot="pq=-"
+	# A = postfixeToAbin(mot)
+	# rA = reecrireEquiv(A)
+	# postfixeRec(A)
+	# print(" devient ", end="")
+	# postfixeRec(rA)
+	# print(" après réecriture de = \n", end="")
+	# A=rA
+	# rA = reecrireImp(rA)
+	# postfixeRec(A)
+	# print(" devient ")
+	# postfixeRec(rA)
+	# print(" après réecriture de >  \n")
+	# A=rA
+	# rA = reecrireNeg(A)
+	# postfixeRec(A)
+	# print(" devient ")
+	# postfixeRec(rA)
+	# print(" après réecriture de - \n")
 
-	mot="pq*---"
-	A = postfixeToAbin(mot)
-	rA = reecrireNeg(A)
-	postfixeRec(A)
-	print(" devient ")
-	postfixeRec(rA)
-	print(" après réecriture de - \n")
+	# mot="pq*---"
+	# A = postfixeToAbin(mot)
+	# rA = reecrireNeg(A)
+	# postfixeRec(A)
+	# print(" devient ")
+	# postfixeRec(rA)
+	# print(" après réecriture de - \n")
 	
-	mot="pq*rs*+"
-	A = postfixeToAbin(mot)
-	rA = reecrireOuEt(A)
-	postfixeRec(A)
-	print(" devient ")
-	postfixeRec(rA)
-	print(" après réecriture de + et * \n")
-	infixeRec(A)
-	print(" devient ")
-	infixeRec(rA)
-	print(" après réecriture de + et * \n")
+	# mot="pq*rs*+"
+	# A = postfixeToAbin(mot)
+	# rA = reecrireOuEt(A)
+	# postfixeRec(A)
+	# print(" devient ")
+	# postfixeRec(rA)
+	# print(" après réecriture de + et * \n")
+	# infixeRec(A)
+	# print(" devient ")
+	# infixeRec(rA)
+	# print(" après réecriture de + et * \n")
+
+    """ Réécriture de la fonction car soucis de copie d'arbre """
+    """ A est modifié directement dans les fonctions          """
+
+    # Réécriture Equivalence
+    mot="pq=-" 
+    A = postfixeToAbin(mot) 
+    postfixeRec(A) 
+    print(" devient ", end="") 
+    postfixeRec(reecrireEquiv(A)) 
+    print(" après réecriture de = \n", end="") 
+
+
+    # Réécriture Implication 
+    postfixeRec(A) 
+    print(" devient ", end ="") 
+    postfixeRec(reecrireImp(A)) 
+    print(" après réecriture de >  \n")
 
 
 def  testFormule():
@@ -487,39 +513,22 @@ def testComplet():
     lc=fncToLc(rA); afficheListeDeClauses(lc)
     
 def main():
-    # a = crAbin(symboleCreer('='),crAbin(symboleCreer('='),feuilleCreer('a'),feuilleCreer('b')),crAbin(symboleCreer('='),feuilleCreer('c'),feuilleCreer('d')))
-    # print("1")
-    # a = postfixeToAbin("pq=-")
-    # postfixeRec(a)
-    # print("\n")
-    
-    # print("2")
-    # ra = reecrireEquiv(a)
-    # postfixeRec(ra)
-    # print("\n")
-    
-    # print("3")
-    # raa = reecrireImp(ra)
-    # postfixeRec(raa)
-    # print("\n")
-    
-    # print("4")
-    # raaa = reecrireNeg(raa)
-    # postfixeRec(raaa)
 
+    # mot = "p-qs*+"
+    # arbre = postfixeToAbin(mot)
 
-    phi = crAbin(symboleCreer(">"),crAbin(symboleCreer("*"),crAbin(symboleCreer("*"),crAbin(symboleCreer("="),feuilleCreer("p"),feuilleCreer("q")),crAbin(symboleCreer(">"),feuilleCreer("q"),feuilleCreer("s"))),feuilleCreer("p")),feuilleCreer("s"))
-    
-    
-    
+    # infixeRec(arbre)
+    # print("\n")
+    # infixeIt(arbre)
 
+    
     # testSymbole()
     # testAbin()
     #testPile()
     # testFormule()
     # testSaisiePostfixe()
-    #testReecriture()
-    #testLc()
+    # testReecriture()
+    testLc()
     #testFncToLc()
     #testComplet()
 
