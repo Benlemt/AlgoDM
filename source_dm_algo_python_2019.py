@@ -58,14 +58,14 @@ def r(a):
 def  abinCopier(a):
     if a == None:
         return None
-    return crAbin(r(a), g(a), d(a))
+    return crAbin(r(a),g(a),d(a))
     
 def postfixeRec( A):
     if (A!=None):
         s=r(A)
         postfixeRec(g(A))
         postfixeRec(d(A))
-        print("%c"%s.face,end="")
+        print("%c"%s.face,end="")   
 
 #Question 2
 
@@ -172,7 +172,6 @@ def postfixeToAbin(mot):
         if arite(symboleCreer(mot[i])) == 0:
             temp = feuilleCreer(mot[i])
             pile = empiler(temp, pile)
-        
         elif arite(symboleCreer(mot[i])) == 1:
             temp = sommet(pile)
             pile = depiler(pile)
@@ -192,86 +191,87 @@ def postfixeToAbin(mot):
         
 #------------------------------ reecriture -------------------*/	
 def reecrireEquiv(a):
-    if a == None:
+    b = abinCopier(a)
+    if b == None:
         return None
 
-    if face(r(a)) == "=":
-        arbreG = crAbin(symboleCreer(">"), g(a), d(a))
-        arbreD = crAbin(symboleCreer(">"), d(a), g(a))
-        a.valeur = symboleCreer("*")
-        a.gauche = arbreG
-        a.droit = arbreD
-    
-    reecrireEquiv(g(a))
-    reecrireEquiv(d(a))
-
-    return a
+    if face(r(b)) == "=":
+        arbreG = crAbin(symboleCreer(">"), g(b), d(b))
+        arbreD = crAbin(symboleCreer(">"), d(b), g(b))
+        b.valeur = symboleCreer("*")
+        b.gauche = arbreG
+        b.droit = arbreD
+    b.gauche = reecrireEquiv(g(b))
+    b.droit = reecrireEquiv(d(b))
+    return b
             
 def reecrireImp(a):
-    if a == None:
+    b=abinCopier(a)
+    if b == None:
         return None
     
-    if face(r(a)) == ">":
-        arbreG = crAbin(symboleCreer("-"), None, g(a))
-        a.valeur = symboleCreer("+")
-        a.gauche = arbreG
+    if face(r(b)) == ">":
+        arbreG = crAbin(symboleCreer("-"), None, g(b))
+        b.valeur = symboleCreer("+")
+        b.gauche = arbreG
     
-    reecrireImp(g(a))
-    reecrireImp(d(a))
+    b.gauche = reecrireImp(g(b))
+    b.droit = reecrireImp(d(b))
 
-    return a
+    return b
 
 def reecrireNeg(a): 
-    if a == None:
+    b = abinCopier(a)
+    if b == None:
         return None
 
-    if face(r(a)) == "-":
-        if face(r(d(a))) == "-":
-            a = d(d(a))
-            reecrireNeg(a)
-        elif face(r(d(a))) == "+":
-            arbreG = crAbin(symboleCreer("-"), None, g(d(a)))
-            arbreD = crAbin(symboleCreer("-"), None, d(d(a)))
-            a.gauche = reecrireNeg(arbreG)
-            a.droit = reecrireNeg(arbreD)
-            a.valeur = symboleCreer("*") 
+    if face(r(b)) == "-":
+        if face(r(d(b))) == "-":
+            b = reecrireNeg(d(d(b)))
+        elif face(r(d(b))) == "+":
+            arbreG = crAbin(symboleCreer("-"), None, g(d(b)))
+            arbreD = crAbin(symboleCreer("-"), None, d(d(b)))
+            b.gauche = reecrireNeg(arbreG)
+            b.droit = reecrireNeg(arbreD)
+            b.valeur = symboleCreer("*") 
         elif face(r(d(a))) == "*":
-            arbreG = crAbin(symboleCreer("-"), None, g(d(a)))
-            arbreD = crAbin(symboleCreer("-"), None, d(d(a)))
-            a.gauche = reecrireNeg(arbreG)
-            a.droit = reecrireNeg(arbreD)
-            a.valeur = symboleCreer("+")
-    return a
+            arbreG = crAbin(symboleCreer("-"), None, g(d(b)))
+            arbreD = crAbin(symboleCreer("-"), None, d(d(b)))
+            b.gauche = reecrireNeg(arbreG)
+            b.droit = reecrireNeg(arbreD)
+            b.valeur = symboleCreer("+")
+    return b
 
 
 def reecrireOuEt(a):
-    if a == None:
+    b=abinCopier(a)
+    if b == None:
         return None
 
-    if face(r(a)) == "+":
-        if face(r(g(a))) == "*" and face(r(d(a))) != "*":
-            arbreG = crAbin(symboleCreer("+"), g(g(a)), d(a))
-            arbreD = crAbin(symboleCreer("+"), d(g(a)), d(a))
-            a.gauche = reecrireOuEt(arbreG)
-            a.droit = reecrireOuEt(arbreD)
-            a.valeur = symboleCreer("*") 
-        elif face(r(g(a))) != "*" and face(r(d(a))) == "*":
-            arbreG = crAbin(symboleCreer("+"), g(a), g(d(a)))
-            arbreD = crAbin(symboleCreer("+"), g(a), d(d(a)))
-            a.gauche = reecrireOuEt(arbreG)
-            a.droit = reecrireOuEt(arbreD)
-            a.valeur = symboleCreer("*") 
-        elif face(r(g(a))) == "*" and face(r(d(a))) == "*":
-            arbreGG = crAbin(symboleCreer("+"), g(g(a)), g(d(a)))
-            arbreGD = crAbin(symboleCreer("+"), g(g(a)), d(d(a)))
-            arbreDG = crAbin(symboleCreer("+"), d(g(a)), g(d(a)))
-            arbreDD = crAbin(symboleCreer("+"), d(g(a)), d(d(a)))
+    if face(r(b)) == "+":
+        if face(r(g(b))) == "*" and face(r(d(b))) != "*":
+            arbreG = crAbin(symboleCreer("+"), g(g(b)), d(b))
+            arbreD = crAbin(symboleCreer("+"), d(g(b)), d(b))
+            b.gauche = reecrireOuEt(arbreG)
+            b.droit = reecrireOuEt(arbreD)
+            b.valeur = symboleCreer("*") 
+        elif face(r(g(b))) != "*" and face(r(d(b))) == "*":
+            arbreG = crAbin(symboleCreer("+"), g(b), g(d(b)))
+            arbreD = crAbin(symboleCreer("+"), g(b), d(d(b)))
+            b.gauche = reecrireOuEt(arbreG)
+            b.droit = reecrireOuEt(arbreD)
+            b.valeur = symboleCreer("*") 
+        elif face(r(g(b))) == "*" and face(r(d(b))) == "*":
+            arbreGG = crAbin(symboleCreer("+"), g(g(b)), g(d(b)))
+            arbreGD = crAbin(symboleCreer("+"), g(g(b)), d(d(b)))
+            arbreDG = crAbin(symboleCreer("+"), d(g(b)), g(d(b)))
+            arbreDD = crAbin(symboleCreer("+"), d(g(b)), d(d(b)))
             arbreG = crAbin(symboleCreer("*"),arbreGG,arbreGD)
             arbreD = crAbin(symboleCreer("*"),arbreDG,arbreDD)
-            a.gauche = reecrireOuEt(arbreG)
-            a.droit = reecrireOuEt(arbreD)
-            a.valeur = symboleCreer("*") 
-    return a
+            b.gauche = reecrireOuEt(arbreG)
+            b.droit = reecrireOuEt(arbreD)
+            b.valeur = symboleCreer("*") 
+    return b
     
 def fnc(a):
     return reecrireOuEt(reecrireNeg(reecrireNeg(reecrireImp(reecrireEquiv(a)))))
@@ -360,28 +360,32 @@ def videToLc():
 #--p devient------ {{p}}
 
 def  feuilleToLc(a):
-     cl = ajClauseDevant(a)
-     lcl = ajListeDeClausesDevant(cl)
-     return lcl 
+     return ajListeDeClausesDevant(ajClauseDevant(a))
 
 # -{{p}} devient {{-p}}
 def negToLc( lc):
-    cl = ajClauseDevant(neg(lc.val.val.valeur))
-    nlc = ajListeDeClausesDevant(neg(cl))
-
-    return nlc
+    return feuilleToLc(neg(lc.val.val))
     
 # {{a, b}} + {{c, d}} = {a,b,c,d}
 def ouToLc(glc, dlc):
-    pass
+   return ajListeDeClausesDevant(append(glc.val,dlc.val))
+
 
 # {{a,b}, {a,c}} et {{e,f}, {d,f}}
 def etToLc(c, d):
-    pass
+    return appendLc(c,d)
 
-def  fncToLc(A):
-    pass
-    
+def  fncToLc(a):
+    if arite(r(a)) == 0 :
+        return feuilleToLc(a)
+    elif arite(r(a)) == 1:
+        return negToLc(fncToLc(d(a)))
+    elif arite(r(a)) == 2:
+        if face(r(a)) == '+':
+            return ouToLc(fncToLc(g(a)),fncToLc(d(a)))
+        else:
+            return etToLc(fncToLc(g(a)),fncToLc(d(a)))
+
 
 ##-------------tests---------------
 	
@@ -417,63 +421,47 @@ def testSaisiePostfixe():
 	postfixeRec(A)
 
 def testReecriture():
-	# mot="pq=-"
-	# A = postfixeToAbin(mot)
-	# rA = reecrireEquiv(A)
-	# postfixeRec(A)
-	# print(" devient ", end="")
-	# postfixeRec(rA)
-	# print(" après réecriture de = \n", end="")
-	# A=rA
-	# rA = reecrireImp(rA)
-	# postfixeRec(A)
-	# print(" devient ")
-	# postfixeRec(rA)
-	# print(" après réecriture de >  \n")
-	# A=rA
-	# rA = reecrireNeg(A)
-	# postfixeRec(A)
-	# print(" devient ")
-	# postfixeRec(rA)
-	# print(" après réecriture de - \n")
+	mot="pq=-"
+	A = postfixeToAbin(mot)
+	rA = reecrireEquiv(A)
+	postfixeRec(A)
+	print(" devient ", end="")
+	postfixeRec(rA)
+	print(" après réecriture de = \n", end="")
+	A=rA
+	rA = reecrireImp(rA)
+	postfixeRec(A)
+	print(" devient ")
+	postfixeRec(rA)
+	print(" après réecriture de >  \n")
+	A=rA
+	rA = reecrireNeg(A)
+	postfixeRec(A)
+	print(" devient ")
+	postfixeRec(rA)
+	print(" après réecriture de - \n")
 
-	# mot="pq*---"
-	# A = postfixeToAbin(mot)
-	# rA = reecrireNeg(A)
-	# postfixeRec(A)
-	# print(" devient ")
-	# postfixeRec(rA)
-	# print(" après réecriture de - \n")
+	mot="pq*---"
+	A = postfixeToAbin(mot)
+	rA = reecrireNeg(A)
+	postfixeRec(A)
+	print(" devient ")
+	postfixeRec(rA)
+	print(" après réecriture de - \n")
 	
-	# mot="pq*rs*+"
-	# A = postfixeToAbin(mot)
-	# rA = reecrireOuEt(A)
-	# postfixeRec(A)
-	# print(" devient ")
-	# postfixeRec(rA)
-	# print(" après réecriture de + et * \n")
-	# infixeRec(A)
-	# print(" devient ")
-	# infixeRec(rA)
-	# print(" après réecriture de + et * \n")
+	mot="pq*rs*+"
+	A = postfixeToAbin(mot)
+	rA = reecrireOuEt(A)
+	postfixeRec(A)
+	print(" devient ")
+	postfixeRec(rA)
+	print(" après réecriture de + et * \n")
+	infixeRec(A)
+	print(" devient ")
+	infixeRec(rA)
+	print(" après réecriture de + et * \n")
 
-    """ Réécriture de la fonction car soucis de copie d'arbre """
-    """ A est modifié directement dans les fonctions          """
-
-    # Réécriture Equivalence
-    mot="pq=-" 
-    A = postfixeToAbin(mot) 
-    postfixeRec(A) 
-    print(" devient ", end="") 
-    postfixeRec(reecrireEquiv(A)) 
-    print(" après réecriture de = \n", end="") 
-
-
-    # Réécriture Implication 
-    postfixeRec(A) 
-    print(" devient ", end ="") 
-    postfixeRec(reecrireImp(A)) 
-    print(" après réecriture de >  \n")
+    
 
 
 def  testFormule():
@@ -521,32 +509,18 @@ def testComplet():
     
 def main():
 
-    # mot1 = "pr+ps+*qr+qs+**"
-    # arbre1 = postfixeToAbin(mot1)
-    # infixeRec(arbre1)
-    # print("\n")
-    # infixeIt(arbre1)
-
-    # print("\n\n")
-            
-    mot2 = "pq=-"
-    arbre2 = postfixeToAbin(mot2)
-    arbre3 = reecrireEquiv(arbre2)
-    postfixeRec(arbre2)
-    print("\n")
-    postfixeRec(arbre3)
-    #infixeIt(arbre2)
-
-
-    
-
-    # testSymbole()
-    # testAbin()
+    mot = "pq+rs+*"
+    arbre = postfixeToAbin(mot)
+    infixeRec(arbre)
+    print('\n')
+    infixeIt(arbre)
+    #testSymbole()
+    #testAbin()
     #testPile()
     # testFormule()
     # testSaisiePostfixe()
-    # testReecriture()
-    # testLc()
+    #testReecriture()
+    #testLc()
     #testFncToLc()
     #testComplet()
 
