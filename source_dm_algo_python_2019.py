@@ -82,33 +82,32 @@ def infixeRec(A):
 def infixeIt(a):
     current = a
     pile = NoeudPileAbin(None)
-    pile_parenthese = NoeudPileAbin(None)
     done = 0
-    nbParenthese = 0
+    
 
     while (not done):
-
-        if current is not None:
-            if current != None and arite(current.valeur) >= 1:
-                pile_parenthese = empiler("(", pile_parenthese)
+        if current is not None and current != "(":
+            if arite(current.valeur) >= 1:
                 print("(", end="")
-
+                pile = empiler("(", pile)
             pile = empiler(current, pile)
             current = current.gauche
+
 
         else:
             if sommet(pile) != None:
                 current = sommet(pile)
                 pile = depiler(pile)
-                
-                if sommet(pile_parenthese) == "(" and arite(current.valeur) == 0:
-                    print("%", end="")
-                    pile_parenthese = depiler(pile_parenthese)
-                print(current.valeur, end="")
-                current = current.droit
+
+                if current != "(":
+                    print(current.valeur, end="")
+                    current = current.droit
+                else:
+                    print(")",end="")
+
+
             else:
-                done = 1
-  
+                done = 1  
 
 
 #-------------pile d'arbres binaires ---------------*/
@@ -521,21 +520,19 @@ def testComplet():
     
 def main():
 
-    # mot1 = "pr+ps+*qr+qs+**"
-    # arbre1 = postfixeToAbin(mot1)
-    # infixeRec(arbre1)
-    # print("\n")
-    # infixeIt(arbre1)
+    mot1 = "pr+ps+*qr+qs+**"
+    arbre1 = postfixeToAbin(mot1)
+    infixeRec(arbre1)
+    print("\n")
+    infixeIt(arbre1)
 
-    # print("\n\n")
+    print("\n\n")
             
     mot2 = "pq=-"
     arbre2 = postfixeToAbin(mot2)
-    arbre3 = reecrireEquiv(arbre2)
-    postfixeRec(arbre2)
+    infixeRec(arbre2)
     print("\n")
-    postfixeRec(arbre3)
-    #infixeIt(arbre2)
+    infixeIt(arbre2)
 
 
     
