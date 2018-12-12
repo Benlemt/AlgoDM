@@ -82,33 +82,32 @@ def infixeRec(A):
 def infixeIt(a):
     current = a
     pile = NoeudPileAbin(None)
-    pile_parenthese = NoeudPileAbin(None)
     done = 0
-    nbParenthese = 0
+    
 
     while (not done):
-
-        if current is not None:
-            if current != None and arite(current.valeur) >= 1:
-                pile_parenthese = empiler("(", pile_parenthese)
+        if current is not None and current != "(":
+            if arite(current.valeur) >= 1:
                 print("(", end="")
-
+                pile = empiler("(", pile)
             pile = empiler(current, pile)
             current = current.gauche
+
 
         else:
             if sommet(pile) != None:
                 current = sommet(pile)
                 pile = depiler(pile)
-                
-                if sommet(pile_parenthese) == "(" and arite(current.valeur) == 0:
-                    print("%", end="")
-                    pile_parenthese = depiler(pile_parenthese)
-                print(current.valeur, end="")
-                current = current.droit
+
+                if current != "(":
+                    print(current.valeur, end="")
+                    current = current.droit
+                else:
+                    print(")",end="")
+
+
             else:
-                done = 1
-  
+                done = 1  
 
 
 #-------------pile d'arbres binaires ---------------*/
@@ -386,6 +385,9 @@ def  fncToLc(a):
         else:
             return etToLc(fncToLc(g(a)),fncToLc(d(a)))
 
+def  formuleToLc(a):
+    return fncToLc(fnc(a))
+
 
 ##-------------tests---------------
 	
@@ -509,19 +511,16 @@ def testComplet():
     
 def main():
 
-    mot = "pq+rs+*"
-    arbre = postfixeToAbin(mot)
-    infixeRec(arbre)
-    print('\n')
-    infixeIt(arbre)
+
+
     #testSymbole()
     #testAbin()
     #testPile()
-    # testFormule()
-    # testSaisiePostfixe()
+    #testFormule()
+    #testSaisiePostfixe()
     #testReecriture()
     #testLc()
     #testFncToLc()
-    #testComplet()
+    testComplet()
 
 main()
